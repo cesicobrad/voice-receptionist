@@ -185,3 +185,7 @@ This is a demo. A production version would add:
 - **Calendar:** sync with the clinic's real calendar or practice-management system.
 - **SMS confirmations:** a text to the caller after each booking.
 - **Admin and data:** authentication on the admin endpoints, and handling of patient data under GDPR.
+
+## License
+
+MIT. See [LICENSE](LICENSE).
