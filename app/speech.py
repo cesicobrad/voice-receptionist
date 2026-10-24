@@ -8,12 +8,21 @@ import threading
 
 log = logging.getLogger("speech")
 
+# Per-language defaults. WHISPER_MODEL / TTS_VOICE in .env override them.
+WHISPER_MODELS = {"en": "small.en", "sl": "large-v3-turbo"}  # *.en models are English-only
+TTS_VOICES = {"en": "en-GB-SoniaNeural", "sl": "sl-SI-PetraNeural"}
+STT_PROMPTS = {
+    "en": "A phone call to a dental clinic receptionist about appointments.",
+    "sl": "Telefonski klic v zobozdravstveno ordinacijo zaradi termina.",
+}
+
 
 class Transcriber:
     """Loads the Whisper model on first use. GPU if available, else CPU int8."""
 
-    def __init__(self, model_size: str | None = None, device: str | None = None):
-        self.model_size = model_size or (os.getenv("WHISPER_MODEL") or "small.en")
+    def __init__(self, model_size: str | None = None, device: str | None = None, language: str = "en"):
+        self.language = language
+        self.model_size = model_size or os.getenv("WHISPER_MODEL") or WHISPER_MODELS[language]
         self.device = device or (os.getenv("WHISPER_DEVICE") or "auto")
         self._model = None
         self._lock = threading.Lock()
@@ -36,7 +45,7 @@ class Transcriber:
             try:
                 model = WhisperModel(self.model_size, device=device, compute_type=compute)
                 # Touch the backend once so missing CUDA libraries fail here, not mid-request.
-                list(model.transcribe(io.BytesIO(_silence_wav()), language="en")[0])
+                list(model.transcribe(io.BytesIO(_silence_wav()), language=self.language)[0])
                 log.info("whisper %s on %s/%s", self.model_size, device, compute)
                 self.backend = f"{self.model_size} on {device}"
                 return model
@@ -54,8 +63,8 @@ class Transcriber:
             except Exception as err:  # PyAV raises its own error types for corrupt input
                 raise ValueError(f"Could not decode audio: {err}") from err
             segments, _ = self._model.transcribe(
-                samples, language="en", beam_size=1, vad_filter=True,
-                initial_prompt="A phone call to a dental clinic receptionist about appointments.",
+                samples, language=self.language, beam_size=1, vad_filter=True,
+                initial_prompt=STT_PROMPTS[self.language],
             )
             return " ".join(s.text.strip() for s in segments).strip()
 
@@ -72,11 +81,15 @@ def _silence_wav(seconds: float = 0.5, rate: int = 16000) -> bytes:
     return buf.getvalue()
 
 
-async def synthesize(text: str, voice: str | None = None) -> bytes:
+def tts_voice(language: str) -> str:
+    return os.getenv("TTS_VOICE") or TTS_VOICES[language]
+
+
+async def synthesize(text: str, language: str = "en", voice: str | None = None) -> bytes:
     """MP3 bytes for `text` using Microsoft Edge's online neural voices."""
     import edge_tts
 
-    voice = voice or (os.getenv("TTS_VOICE") or "en-GB-SoniaNeural")
+    voice = voice or tts_voice(language)
     audio = bytearray()
     async for chunk in edge_tts.Communicate(text, voice, rate="+5%").stream():
         if chunk["type"] == "audio":

@@ -1,0 +1,7 @@
+# App logic, API and tests. Enough for CI (no speech models, no network).
+fastapi>=0.115
+python-multipart>=0.0.9
+python-dotenv>=1.0
+anthropic>=0.122
+pytest>=8
+httpx>=0.27

@@ -9,6 +9,7 @@ from __future__ import annotations
 import logging
 import os
 import re
+import time
 from dataclasses import dataclass, field
 from datetime import date, datetime, timedelta
 from pathlib import Path
@@ -18,6 +19,8 @@ from .tools import run_tool, tool_definitions
 
 log = logging.getLogger("receptionist")
 KNOWLEDGE_FILE = Path(__file__).with_name("knowledge.md")
+# Models that accept server-side refusal fallbacks (`fallbacks: "default"`). Haiku 5.5 has none.
+SERVER_FALLBACK_MODELS = {"claude-opus-5-5", "claude-sonnet-5-5", "claude-opus-5", "claude-fable-5-1"}
 
 
 @dataclass
@@ -26,8 +29,34 @@ class Turn:
     events: list[dict] = field(default_factory=list)
 
 
-def greeting(clinic: dict) -> str:
+LANGUAGES = ("en", "sl")
+SL_WEEKDAYS = ["ponedeljek", "torek", "sreda", "četrtek", "petek", "sobota", "nedelja"]
+SL_MONTHS = ["januarja", "februarja", "marca", "aprila", "maja", "junija", "julija",
+             "avgusta", "septembra", "oktobra", "novembra", "decembra"]  # genitive: "24. oktobra"
+
+
+def requested_language() -> str:
+    lang = (os.getenv("RECEPTIONIST_LANGUAGE") or "en").lower()
+    if lang not in LANGUAGES:
+        raise ValueError(f"RECEPTIONIST_LANGUAGE must be one of {LANGUAGES}, got {lang!r}")
+    return lang
+
+
+def claude_enabled() -> bool:
+    wanted = (os.getenv("RECEPTIONIST_MODE") or "auto").lower()
+    has_key = bool(os.getenv("ANTHROPIC_API_KEY") or os.getenv("ANTHROPIC_AUTH_TOKEN"))
+    return wanted == "claude" or (wanted == "auto" and has_key)
+
+
+def greeting(clinic: dict, language: str = "en") -> str:
+    if language == "sl":
+        return f"Pozdravljeni, dobili ste {clinic['business']}. Sem {clinic['assistant']}, virtualna receptorka. Kako vam lahko pomagam?"
     return f"Hello, you've reached {clinic['business']}. I'm {clinic['assistant']}, the virtual receptionist. How can I help?"
+
+
+def sl_date(day: date) -> str:
+    """'sobota, 24. oktobra 2026', the way a Slovenian receptionist would say it."""
+    return f"{SL_WEEKDAYS[day.weekday()]}, {day.day}. {SL_MONTHS[day.month - 1]} {day.year}"
 
 
 def say_date(day: date) -> str:
@@ -46,20 +75,34 @@ def hours_sentence(clinic: dict) -> str:
 # Claude
 # --------------------------------------------------------------------------
 
-def build_system_prompt(clinic: dict, knowledge: str, today: date) -> str:
+SPEECH_STYLE = {
+    "en": """Everything you say is converted to speech, so:
+- Answer in one to three short, natural sentences, under 40 words. No lists, markdown, emoji or abbreviations.
+- Only mention information the caller needs right now; offer more instead of reciting it.
+- Say dates like "Tuesday the 3rd of November" and times like "half past two" or "9 am".
+- When you read out a booking reference, spell it letter by letter, separated by spaces.
+- Ask for one missing detail at a time.""",
+    "sl": """This line is in Slovenia. Speak Slovenian (slovenščina) and use the formal "vi" form, even though
+these instructions and the clinic notes are in English. Switch to English only if the caller speaks English.
+Everything you say is converted to speech, so:
+- Answer in one to three short, natural sentences, under 40 words. No lists, markdown, emoji or abbreviations.
+- Only mention information the caller needs right now; offer more instead of reciting it.
+- Say dates the Slovenian way: "v torek, 27. oktobra". Say times in words: "ob devetih", "ob pol desetih"
+  (9:30), "ob četrt na enajst" (10:15), "ob dveh popoldne" (14:00). Prices: "sedemdeset evrov".
+- Read phone numbers back in groups of digits. Spell booking references letter by letter, separated by spaces.
+- Ask for one missing detail at a time.""",
+}
+
+
+def build_system_prompt(clinic: dict, knowledge: str, today: date, language: str = "en") -> str:
     services = "\n".join(
         f"- {key}: {s['label']}, {s['minutes']} minutes, {s['price_eur']} euros"
         for key, s in clinic["services"].items()
     )
     return f"""You are {clinic['assistant']}, the virtual receptionist of {clinic['business']}, answering a voice call.
-Today is {WEEKDAYS[today.weekday()].title()}, {today.isoformat()}.
+Today is {WEEKDAYS[today.weekday()].title()}, {today.isoformat()}{f" ({sl_date(today)})" if language == "sl" else ""}.
 
-Everything you say is converted to speech, so:
-- Answer in one to three short, natural sentences, under 40 words. No lists, markdown, emoji or abbreviations.
-- Only mention information the caller needs right now; offer more instead of reciting it.
-- Say dates like "Tuesday the 3rd of November" and times like "half past two" or "9 am".
-- When you read out a booking reference, spell it letter by letter, separated by spaces.
-- Ask for one missing detail at a time.
+{SPEECH_STYLE[language]}
 
 How you work:
 - Use check_availability before offering any time; never invent free slots. Offer two or three options, not the whole list.
@@ -82,18 +125,20 @@ class ClaudeReceptionist:
     mode = "claude"
 
     def __init__(self, bookings: BookingService, client=None, model: str | None = None,
-                 effort: str | None = None):
+                 effort: str | None = None, language: str = "en"):
         import anthropic
 
         self.anthropic = anthropic
         self.client = client or anthropic.Anthropic()
-        self.model = model or (os.getenv("CLAUDE_MODEL") or "claude-opus-5-5")
+        self.model = model or (os.getenv("CLAUDE_MODEL") or "claude-haiku-5-5")
         self.effort = effort or (os.getenv("CLAUDE_EFFORT") or "low")  # low keeps voice replies snappy
         self.bookings = bookings
         self.clinic = bookings.clinic
         self.tools = tool_definitions(list(self.clinic["services"]))
         self.knowledge = KNOWLEDGE_FILE.read_text(encoding="utf-8")
-        self.greeting = greeting(self.clinic)
+        self.language = language
+        self.greeting = greeting(self.clinic, language)
+        self.calls: list[dict] = []  # per-request usage and latency, for logging and model comparison
         # Append-only history; assistant content is passed back unchanged (thinking blocks included).
         self.history: list[dict] = [{"role": "assistant", "content": self.greeting}]
 
@@ -101,9 +146,14 @@ class ClaudeReceptionist:
         checkpoint = len(self.history)
         self.history.append({"role": "user", "content": text})
         events: list[dict] = []
-        system = build_system_prompt(self.clinic, self.knowledge, self.bookings.now().date())
+        system = build_system_prompt(self.clinic, self.knowledge, self.bookings.now().date(), self.language)
         try:
             for _ in range(8):
+                extra = {}
+                if self.model in SERVER_FALLBACK_MODELS:
+                    # If a safety classifier declines, the API retries on a suitable model.
+                    extra = {"betas": ["server-side-fallback-2026-07-01"], "fallbacks": "default"}
+                started = time.perf_counter()
                 response = self.client.beta.messages.create(
                     model=self.model,
                     max_tokens=4096,
@@ -111,10 +161,9 @@ class ClaudeReceptionist:
                     tools=self.tools,
                     messages=self.history,
                     output_config={"effort": self.effort},
-                    # Server-side fallback: if a safety classifier declines, the API retries on a suitable model.
-                    betas=["server-side-fallback-2026-07-01"],
-                    fallbacks="default",
+                    **extra,
                 )
+                self._record(response, time.perf_counter() - started)
                 if response.stop_reason == "refusal":
                     del self.history[checkpoint:]
                     return Turn("Sorry, I can't help with that. I can book, move or cancel appointments, or take a message.")
@@ -144,6 +193,16 @@ class ClaudeReceptionist:
             reply = "Sorry, I lost my connection for a moment. Could you say that again?"
         del self.history[checkpoint:]
         return Turn(reply, events)
+
+
+    def _record(self, response, seconds: float):
+        usage = getattr(response, "usage", None)
+        self.calls.append({
+            "seconds": round(seconds, 3),
+            "stop_reason": response.stop_reason,
+            "input_tokens": getattr(usage, "input_tokens", 0) or 0,
+            "output_tokens": getattr(usage, "output_tokens", 0) or 0,
+        })
 
 
 def _json(value) -> str:
@@ -456,10 +515,8 @@ def _join(items: list[str]) -> str:
     return items[0] if len(items) == 1 else ", ".join(items[:-1]) + " or " + items[-1]
 
 
-def make_receptionist(bookings: BookingService):
-    """Claude when credentials are configured, otherwise the offline script."""
-    wanted = (os.getenv("RECEPTIONIST_MODE") or "auto").lower()
-    has_key = bool(os.getenv("ANTHROPIC_API_KEY") or os.getenv("ANTHROPIC_AUTH_TOKEN"))
-    if wanted == "claude" or (wanted == "auto" and has_key):
-        return ClaudeReceptionist(bookings)
+def make_receptionist(bookings: BookingService, language: str = "en"):
+    """Claude when credentials are configured, otherwise the offline script (English only)."""
+    if claude_enabled():
+        return ClaudeReceptionist(bookings, language=language)
     return ScriptedReceptionist(bookings)

@@ -1,0 +1,1916 @@
+{
+ "effort": "low",
+ "clock": "2026-10-24T12:00:00",
+ "summary": [
+  {
+   "model": "claude-opus-5-5",
+   "passed": "14/14",
+   "failed": [],
+   "turn_median_s": 2.78,
+   "turn_p90_s": 4.98,
+   "call_median_s": 2.11,
+   "calls": 38,
+   "avg_in_tokens": 2667,
+   "avg_out_tokens": 97,
+   "cost_per_call_usd": 0.01261,
+   "cost_per_conversation_usd": 0.0342,
+   "total_cost_usd": 0.4792
+  },
+  {
+   "model": "claude-sonnet-5-5",
+   "passed": "14/14",
+   "failed": [],
+   "turn_median_s": 2.08,
+   "turn_p90_s": 4.77,
+   "call_median_s": 1.45,
+   "calls": 38,
+   "avg_in_tokens": 2683,
+   "avg_out_tokens": 88,
+   "cost_per_call_usd": 0.00624,
+   "cost_per_conversation_usd": 0.0169,
+   "total_cost_usd": 0.2372
+  },
+  {
+   "model": "claude-haiku-5-5",
+   "passed": "14/14",
+   "failed": [],
+   "turn_median_s": 1.83,
+   "turn_p90_s": 3.12,
+   "call_median_s": 1.35,
+   "calls": 38,
+   "avg_in_tokens": 2732,
+   "avg_out_tokens": 108,
+   "cost_per_call_usd": 0.00033,
+   "cost_per_conversation_usd": 0.0009,
+   "total_cost_usd": 0.0124
+  }
+ ],
+ "results": [
+  {
+   "model": "claude-opus-5-5",
+   "scenario": "booking",
+   "ok": true,
+   "api_errors": 0,
+   "turn_seconds": [
+    4.15,
+    2.74,
+    3.79
+   ],
+   "calls": [
+    {
+     "seconds": 2.103,
+     "stop_reason": "tool_use",
+     "input_tokens": 2391,
+     "output_tokens": 93
+    },
+    {
+     "seconds": 2.046,
+     "stop_reason": "end_turn",
+     "input_tokens": 2620,
+     "output_tokens": 49
+    },
+    {
+     "seconds": 2.742,
+     "stop_reason": "end_turn",
+     "input_tokens": 2692,
+     "output_tokens": 55
+    },
+    {
+     "seconds": 2.335,
+     "stop_reason": "tool_use",
+     "input_tokens": 2757,
+     "output_tokens": 173
+    },
+    {
+     "seconds": 1.455,
+     "stop_reason": "end_turn",
+     "input_tokens": 3046,
+     "output_tokens": 49
+    }
+   ],
+   "cost_usd": 0.0624,
+   "transcript": [
+    {
+     "caller": "Hi, I'd like to book a cleaning next Tuesday morning, around 10 if that's free.",
+     "nora": "Good news, 10 am on Tuesday the 27th of October is free for a cleaning. Could I have your full name, please?",
+     "seconds": 4.15,
+     "events": []
+    },
+    {
+     "caller": "Luka Horvat, and my number is 040 123 456.",
+     "nora": "So that's a professional cleaning on Tuesday the 27th of October at 10 am, for Luka Horvat, phone 040 123 456. Shall I book it?",
+     "seconds": 2.74,
+     "events": []
+    },
+    {
+     "caller": "Yes, please.",
+     "nora": "You're booked for 10 am on Tuesday the 27th of October. Your reference is 2 W G D 6. Is there anything else I can help with?",
+     "seconds": 3.79,
+     "events": [
+      "booked"
+     ]
+    }
+   ],
+   "run": 1
+  },
+  {
+   "model": "claude-opus-5-5",
+   "scenario": "questions",
+   "ok": true,
+   "api_errors": 0,
+   "turn_seconds": [
+    1.92
+   ],
+   "calls": [
+    {
+     "seconds": 1.917,
+     "stop_reason": "end_turn",
+     "input_tokens": 2377,
+     "output_tokens": 102
+    }
+   ],
+   "cost_usd": 0.01155,
+   "transcript": [
+    {
+     "caller": "Are you open on Friday afternoon? And is there parking?",
+     "nora": "On Friday we're only open from 8 am until 2 pm, so not in the later afternoon. And yes, there's free parking behind the building, with the entrance from Birch Lane.",
+     "seconds": 1.92,
+     "events": []
+    }
+   ],
+   "run": 1
+  },
+  {
+   "model": "claude-opus-5-5",
+   "scenario": "cancel",
+   "ok": true,
+   "api_errors": 0,
+   "turn_seconds": [
+    1.71,
+    3.52
+   ],
+   "calls": [
+    {
+     "seconds": 1.707,
+     "stop_reason": "end_turn",
+     "input_tokens": 2383,
+     "output_tokens": 56
+    },
+    {
+     "seconds": 1.423,
+     "stop_reason": "tool_use",
+     "input_tokens": 2448,
+     "output_tokens": 79
+    },
+    {
+     "seconds": 2.092,
+     "stop_reason": "end_turn",
+     "input_tokens": 2644,
+     "output_tokens": 109
+    }
+   ],
+   "cost_usd": 0.03478,
+   "transcript": [
+    {
+     "caller": "I need to cancel my appointment, the reference is 2 7 J T 6.",
+     "nora": "I can help with that. Could you tell me the phone number the booking was made with?",
+     "seconds": 1.71,
+     "events": []
+    },
+    {
+     "caller": "040 123 456",
+     "nora": "Thanks, Luka. I've cancelled your cleaning that was booked for Tuesday the 27th of October at 10 am. It's more than 24 hours away, so you won't be charged. Would you like to book a new time?",
+     "seconds": 3.52,
+     "events": [
+      "cancelled"
+     ]
+    }
+   ],
+   "run": 1
+  },
+  {
+   "model": "claude-opus-5-5",
+   "scenario": "callback",
+   "ok": true,
+   "api_errors": 0,
+   "turn_seconds": [
+    2.33,
+    4.95
+   ],
+   "calls": [
+    {
+     "seconds": 2.332,
+     "stop_reason": "end_turn",
+     "input_tokens": 2395,
+     "output_tokens": 90
+    },
+    {
+     "seconds": 2.576,
+     "stop_reason": "tool_use",
+     "input_tokens": 2495,
+     "output_tokens": 137
+    },
+    {
+     "seconds": 2.37,
+     "stop_reason": "end_turn",
+     "input_tokens": 2735,
+     "output_tokens": 78
+    }
+   ],
+   "cost_usd": 0.0366,
+   "transcript": [
+    {
+     "caller": "Can someone call me back about whether my insurance covers whitening? I'm Maja Kos, 041 222 333.",
+     "nora": "I can actually answer that right away, Maja: whitening is never covered by insurance with us, and the treatment costs 220 euros. Would you still like a staff member to call you back?",
+     "seconds": 2.33,
+     "events": []
+    },
+    {
+     "caller": "Yes, please.",
+     "nora": "Done, Maja. I've asked staff to call you back on 041 222 333. We're closed today, so they'll most likely call on Monday. Is there anything else I can help with?",
+     "seconds": 4.95,
+     "events": [
+      "message"
+     ]
+    }
+   ],
+   "run": 1
+  },
+  {
+   "model": "claude-opus-5-5",
+   "scenario": "danger",
+   "ok": true,
+   "api_errors": 0,
+   "turn_seconds": [
+    1.73
+   ],
+   "calls": [
+    {
+     "seconds": 1.732,
+     "stop_reason": "end_turn",
+     "input_tokens": 2379,
+     "output_tokens": 72
+    }
+   ],
+   "cost_usd": 0.01096,
+   "transcript": [
+    {
+     "caller": "My cheek is swelling up and it's getting hard to swallow.",
+     "nora": "That sounds serious. Please hang up and call 112 right now, because swelling that makes it hard to swallow needs urgent care.",
+     "seconds": 1.73,
+     "events": []
+    }
+   ],
+   "run": 1
+  },
+  {
+   "model": "claude-opus-5-5",
+   "scenario": "booking (sl)",
+   "ok": true,
+   "api_errors": 0,
+   "turn_seconds": [
+    4.96,
+    2.28,
+    7.54
+   ],
+   "calls": [
+    {
+     "seconds": 2.426,
+     "stop_reason": "tool_use",
+     "input_tokens": 2585,
+     "output_tokens": 94
+    },
+    {
+     "seconds": 2.536,
+     "stop_reason": "end_turn",
+     "input_tokens": 2815,
+     "output_tokens": 121
+    },
+    {
+     "seconds": 2.281,
+     "stop_reason": "end_turn",
+     "input_tokens": 2960,
+     "output_tokens": 69
+    },
+    {
+     "seconds": 5.694,
+     "stop_reason": "tool_use",
+     "input_tokens": 3040,
+     "output_tokens": 173
+    },
+    {
+     "seconds": 1.843,
+     "stop_reason": "end_turn",
+     "input_tokens": 3329,
+     "output_tokens": 71
+    }
+   ],
+   "cost_usd": 0.06948,
+   "transcript": [
+    {
+     "caller": "Pozdravljeni, rad bi se naročil na čiščenje zob prihodnji torek dopoldne, okoli desetih, če je prosto.",
+     "nora": "Dobra novica: v torek, 27. oktobra, je čiščenje ob desetih prosto. Prosto je tudi ob pol desetih in ob pol enajstih. Vam ustreza ob desetih? Prosim, povejte mi še svoje ime in priimek.",
+     "seconds": 4.96,
+     "events": []
+    },
+    {
+     "caller": "Luka Horvat, moja številka je 040 123 456.",
+     "nora": "Hvala. Torej profesionalno čiščenje zob v torek, 27. oktobra, ob desetih, na ime Luka Horvat, telefon 040 123 456. Je to pravilno?",
+     "seconds": 2.28,
+     "events": []
+    },
+    {
+     "caller": "Da, prosim.",
+     "nora": "Naročeni ste za čiščenje zob v torek, 27. oktobra, ob desetih. Številka vaše rezervacije je J N U F 9. Ali vam lahko pomagam še s čim?",
+     "seconds": 7.54,
+     "events": [
+      "booked"
+     ]
+    }
+   ],
+   "run": 1
+  },
+  {
+   "model": "claude-opus-5-5",
+   "scenario": "questions (sl)",
+   "ok": true,
+   "api_errors": 0,
+   "turn_seconds": [
+    2.82
+   ],
+   "calls": [
+    {
+     "seconds": 2.821,
+     "stop_reason": "end_turn",
+     "input_tokens": 2561,
+     "output_tokens": 141
+    }
+   ],
+   "cost_usd": 0.01306,
+   "transcript": [
+    {
+     "caller": "Ali ste v petek popoldne odprti? In ali imate parkirišče?",
+     "nora": "Ob petkih smo odprti od osmih zjutraj do dveh popoldne, zato popoldne žal ne delamo. Za stavbo imamo brezplačno parkirišče, vhod je z ulice Birch Lane. Bi želeli rezervirati termin?",
+     "seconds": 2.82,
+     "events": []
+    }
+   ],
+   "run": 1
+  },
+  {
+   "model": "claude-sonnet-5-5",
+   "scenario": "booking",
+   "ok": true,
+   "api_errors": 0,
+   "turn_seconds": [
+    3.89,
+    1.36,
+    2.8
+   ],
+   "calls": [
+    {
+     "seconds": 2.436,
+     "stop_reason": "tool_use",
+     "input_tokens": 2391,
+     "output_tokens": 116
+    },
+    {
+     "seconds": 1.455,
+     "stop_reason": "end_turn",
+     "input_tokens": 2643,
+     "output_tokens": 51
+    },
+    {
+     "seconds": 1.364,
+     "stop_reason": "end_turn",
+     "input_tokens": 2717,
+     "output_tokens": 61
+    },
+    {
+     "seconds": 1.656,
+     "stop_reason": "tool_use",
+     "input_tokens": 2788,
+     "output_tokens": 173
+    },
+    {
+     "seconds": 1.14,
+     "stop_reason": "end_turn",
+     "input_tokens": 3077,
+     "output_tokens": 54
+    }
+   ],
+   "cost_usd": 0.03178,
+   "transcript": [
+    {
+     "caller": "Hi, I'd like to book a cleaning next Tuesday morning, around 10 if that's free.",
+     "nora": "Yes, 10 am is free on Tuesday the 27th of October. Shall I book a cleaning at 10 am? If so, may I have your full name?",
+     "seconds": 3.89,
+     "events": []
+    },
+    {
+     "caller": "Luka Horvat, and my number is 040 123 456.",
+     "nora": "Thank you. To confirm: a professional cleaning on Tuesday the 27th of October at 10 am, for Luka Horvat, phone 040 123 456. Is that correct?",
+     "seconds": 1.36,
+     "events": []
+    },
+    {
+     "caller": "Yes, please.",
+     "nora": "You're booked, Luka. Your reference is 9 M H K 6, for Tuesday the 27th of October at 10 am. Is there anything else I can help with?",
+     "seconds": 2.8,
+     "events": [
+      "booked"
+     ]
+    }
+   ],
+   "run": 1
+  },
+  {
+   "model": "claude-sonnet-5-5",
+   "scenario": "questions",
+   "ok": true,
+   "api_errors": 0,
+   "turn_seconds": [
+    1.33
+   ],
+   "calls": [
+    {
+     "seconds": 1.329,
+     "stop_reason": "end_turn",
+     "input_tokens": 2377,
+     "output_tokens": 64
+    }
+   ],
+   "cost_usd": 0.00539,
+   "transcript": [
+    {
+     "caller": "Are you open on Friday afternoon? And is there parking?",
+     "nora": "Friday we're open from 8 am to 2 pm, so only until 2 in the afternoon. There's free parking behind the building, with the entrance from Birch Lane. Would you like to book something?",
+     "seconds": 1.33,
+     "events": []
+    }
+   ],
+   "run": 1
+  },
+  {
+   "model": "claude-sonnet-5-5",
+   "scenario": "cancel",
+   "ok": true,
+   "api_errors": 0,
+   "turn_seconds": [
+    1.17,
+    2.75
+   ],
+   "calls": [
+    {
+     "seconds": 1.169,
+     "stop_reason": "end_turn",
+     "input_tokens": 2381,
+     "output_tokens": 37
+    },
+    {
+     "seconds": 1.159,
+     "stop_reason": "tool_use",
+     "input_tokens": 2425,
+     "output_tokens": 80
+    },
+    {
+     "seconds": 1.586,
+     "stop_reason": "end_turn",
+     "input_tokens": 2623,
+     "output_tokens": 64
+    }
+   ],
+   "cost_usd": 0.01667,
+   "transcript": [
+    {
+     "caller": "I need to cancel my appointment, the reference is L P 7 B K.",
+     "nora": "Thank you. To cancel it, I also need the phone number the booking was made with. Could you tell me that, please?",
+     "seconds": 1.17,
+     "events": []
+    },
+    {
+     "caller": "040 123 456",
+     "nora": "Your professional cleaning on Tuesday the 27th of October at 10 am is now cancelled, Mr. Horvat. Would you like to book a new time, or is there anything else I can help with?",
+     "seconds": 2.75,
+     "events": [
+      "cancelled"
+     ]
+    }
+   ],
+   "run": 1
+  },
+  {
+   "model": "claude-sonnet-5-5",
+   "scenario": "callback",
+   "ok": true,
+   "api_errors": 0,
+   "turn_seconds": [
+    3.84,
+    1.28
+   ],
+   "calls": [
+    {
+     "seconds": 2.461,
+     "stop_reason": "tool_use",
+     "input_tokens": 2395,
+     "output_tokens": 231
+    },
+    {
+     "seconds": 1.374,
+     "stop_reason": "end_turn",
+     "input_tokens": 2717,
+     "output_tokens": 61
+    },
+    {
+     "seconds": 1.276,
+     "stop_reason": "end_turn",
+     "input_tokens": 2788,
+     "output_tokens": 13
+    }
+   ],
+   "cost_usd": 0.01885,
+   "transcript": [
+    {
+     "caller": "Can someone call me back about whether my insurance covers whitening? I'm Maja Kos, 041 222 333.",
+     "nora": "I've logged your callback request, Maja, and staff will phone you on 041 222 333. In the meantime, our notes say whitening is never covered by insurance. Can I help with anything else?",
+     "seconds": 3.84,
+     "events": [
+      "message"
+     ]
+    },
+    {
+     "caller": "Yes, please.",
+     "nora": "Of course. What would you like help with?",
+     "seconds": 1.28,
+     "events": []
+    }
+   ],
+   "run": 1
+  },
+  {
+   "model": "claude-sonnet-5-5",
+   "scenario": "danger",
+   "ok": true,
+   "api_errors": 0,
+   "turn_seconds": [
+    1.45
+   ],
+   "calls": [
+    {
+     "seconds": 1.454,
+     "stop_reason": "end_turn",
+     "input_tokens": 2379,
+     "output_tokens": 43
+    }
+   ],
+   "cost_usd": 0.00519,
+   "transcript": [
+    {
+     "caller": "My cheek is swelling up and it's getting hard to swallow.",
+     "nora": "Swelling that makes swallowing hard can be serious. Please call 112 right now. Don't wait for a clinic appointment.",
+     "seconds": 1.45,
+     "events": []
+    }
+   ],
+   "run": 1
+  },
+  {
+   "model": "claude-sonnet-5-5",
+   "scenario": "booking (sl)",
+   "ok": true,
+   "api_errors": 0,
+   "turn_seconds": [
+    3.18,
+    1.78,
+    4.17
+   ],
+   "calls": [
+    {
+     "seconds": 1.708,
+     "stop_reason": "tool_use",
+     "input_tokens": 2585,
+     "output_tokens": 115
+    },
+    {
+     "seconds": 1.468,
+     "stop_reason": "end_turn",
+     "input_tokens": 2836,
+     "output_tokens": 67
+    },
+    {
+     "seconds": 1.776,
+     "stop_reason": "end_turn",
+     "input_tokens": 2927,
+     "output_tokens": 94
+    },
+    {
+     "seconds": 2.548,
+     "stop_reason": "tool_use",
+     "input_tokens": 3032,
+     "output_tokens": 173
+    },
+    {
+     "seconds": 1.626,
+     "stop_reason": "end_turn",
+     "input_tokens": 3321,
+     "output_tokens": 53
+    }
+   ],
+   "cost_usd": 0.03442,
+   "transcript": [
+    {
+     "caller": "Pozdravljeni, rad bi se naročil na čiščenje zob prihodnji torek dopoldne, okoli desetih, če je prosto.",
+     "nora": "V torek, 27. oktobra, imamo prosto ob desetih. Prosti sta tudi ob pol desetih in ob pol enajstih. Ali vam ustreza ob desetih?",
+     "seconds": 3.18,
+     "events": []
+    },
+    {
+     "caller": "Luka Horvat, moja številka je 040 123 456.",
+     "nora": "Hvala, gospod Horvat. Potrdim: strokovno čiščenje zob v torek, 27. oktobra, ob desetih, na ime Luka Horvat. Telefon: nič štiri nič, ena dva tri, štiri pet šest. Je prav?",
+     "seconds": 1.78,
+     "events": []
+    },
+    {
+     "caller": "Da, prosim.",
+     "nora": "Naročeni ste. Vaša referenčna številka je X J N H W. Prosim, pridite deset minut prej. Vas zanima še kaj?",
+     "seconds": 4.17,
+     "events": [
+      "booked"
+     ]
+    }
+   ],
+   "run": 1
+  },
+  {
+   "model": "claude-sonnet-5-5",
+   "scenario": "questions (sl)",
+   "ok": true,
+   "api_errors": 0,
+   "turn_seconds": [
+    2.24
+   ],
+   "calls": [
+    {
+     "seconds": 2.238,
+     "stop_reason": "end_turn",
+     "input_tokens": 2561,
+     "output_tokens": 102
+    }
+   ],
+   "cost_usd": 0.00614,
+   "transcript": [
+    {
+     "caller": "Ali ste v petek popoldne odprti? In ali imate parkirišče?",
+     "nora": "Ob petkih smo odprti od osmih zjutraj do dveh popoldne, tako da popoldne žal že zapremo. Parkirišče pa imamo brezplačno za stavbo, vhod je z Brezove ulice. Vam lahko pomagam pri rezervaciji termina?",
+     "seconds": 2.24,
+     "events": []
+    }
+   ],
+   "run": 1
+  },
+  {
+   "model": "claude-haiku-5-5",
+   "scenario": "booking",
+   "ok": true,
+   "api_errors": 0,
+   "turn_seconds": [
+    2.55,
+    1.55,
+    2.09
+   ],
+   "calls": [
+    {
+     "seconds": 1.567,
+     "stop_reason": "tool_use",
+     "input_tokens": 2391,
+     "output_tokens": 210
+    },
+    {
+     "seconds": 0.985,
+     "stop_reason": "end_turn",
+     "input_tokens": 2737,
+     "output_tokens": 47
+    },
+    {
+     "seconds": 1.549,
+     "stop_reason": "end_turn",
+     "input_tokens": 2807,
+     "output_tokens": 148
+    },
+    {
+     "seconds": 1.202,
+     "stop_reason": "tool_use",
+     "input_tokens": 2965,
+     "output_tokens": 173
+    },
+    {
+     "seconds": 0.884,
+     "stop_reason": "end_turn",
+     "input_tokens": 3254,
+     "output_tokens": 52
+    }
+   ],
+   "cost_usd": 0.00173,
+   "transcript": [
+    {
+     "caller": "Hi, I'd like to book a cleaning next Tuesday morning, around 10 if that's free.",
+     "nora": "Good news, 10 o'clock on Tuesday the 27th of October is free. Would you like that time, or should I suggest another morning slot?",
+     "seconds": 2.55,
+     "events": []
+    },
+    {
+     "caller": "Luka Horvat, and my number is 040 123 456.",
+     "nora": "Thank you, Luka. To confirm: a professional cleaning on Tuesday the 27th of October at 10 am, under the name Luka Horvat, with phone number 040 123 456. Shall I book it?",
+     "seconds": 1.55,
+     "events": []
+    },
+    {
+     "caller": "Yes, please.",
+     "nora": "Your cleaning is booked for Tuesday the 27th of October at 10 am. Your reference is A L P U B. Is there anything else I can help you with?",
+     "seconds": 2.09,
+     "events": [
+      "booked"
+     ]
+    }
+   ],
+   "run": 1
+  },
+  {
+   "model": "claude-haiku-5-5",
+   "scenario": "questions",
+   "ok": true,
+   "api_errors": 0,
+   "turn_seconds": [
+    1.45
+   ],
+   "calls": [
+    {
+     "seconds": 1.451,
+     "stop_reason": "end_turn",
+     "input_tokens": 2377,
+     "output_tokens": 60
+    }
+   ],
+   "cost_usd": 0.00027,
+   "transcript": [
+    {
+     "caller": "Are you open on Friday afternoon? And is there parking?",
+     "nora": "Friday we're open from 8 am to 2 pm, so no afternoon appointments after 2 pm. Yes, there is free parking behind the building, entered from Birch Lane.",
+     "seconds": 1.45,
+     "events": []
+    }
+   ],
+   "run": 1
+  },
+  {
+   "model": "claude-haiku-5-5",
+   "scenario": "cancel",
+   "ok": true,
+   "api_errors": 0,
+   "turn_seconds": [
+    0.88,
+    2.18
+   ],
+   "calls": [
+    {
+     "seconds": 0.883,
+     "stop_reason": "end_turn",
+     "input_tokens": 2379,
+     "output_tokens": 26
+    },
+    {
+     "seconds": 1.259,
+     "stop_reason": "tool_use",
+     "input_tokens": 2412,
+     "output_tokens": 154
+    },
+    {
+     "seconds": 0.924,
+     "stop_reason": "end_turn",
+     "input_tokens": 2684,
+     "output_tokens": 45
+    }
+   ],
+   "cost_usd": 0.00086,
+   "transcript": [
+    {
+     "caller": "I need to cancel my appointment, the reference is N K G B V.",
+     "nora": "I can help with that. Could you please tell me the phone number the booking was made under?",
+     "seconds": 0.88,
+     "events": []
+    },
+    {
+     "caller": "040 123 456",
+     "nora": "Your cleaning appointment on Tuesday the 27th of October at 10 am has been cancelled. Would you like to book a new time?",
+     "seconds": 2.18,
+     "events": [
+      "cancelled"
+     ]
+    }
+   ],
+   "run": 1
+  },
+  {
+   "model": "claude-haiku-5-5",
+   "scenario": "callback",
+   "ok": true,
+   "api_errors": 0,
+   "turn_seconds": [
+    3.41,
+    1.58
+   ],
+   "calls": [
+    {
+     "seconds": 1.73,
+     "stop_reason": "tool_use",
+     "input_tokens": 2395,
+     "output_tokens": 145
+    },
+    {
+     "seconds": 1.683,
+     "stop_reason": "end_turn",
+     "input_tokens": 2651,
+     "output_tokens": 48
+    },
+    {
+     "seconds": 1.576,
+     "stop_reason": "end_turn",
+     "input_tokens": 2709,
+     "output_tokens": 35
+    }
+   ],
+   "cost_usd": 0.00089,
+   "transcript": [
+    {
+     "caller": "Can someone call me back about whether my insurance covers whitening? I'm Maja Kos, 041 222 333.",
+     "nora": "Thank you, Maja. I've logged your callback request, and a member of our team will call you on 041 222 333. Is there anything else I can help with?",
+     "seconds": 3.41,
+     "events": [
+      "message"
+     ]
+    },
+    {
+     "caller": "Yes, please.",
+     "nora": "I'm happy to help. What would you like to do today, such as booking an appointment or asking a question about our services?",
+     "seconds": 1.58,
+     "events": []
+    }
+   ],
+   "run": 1
+  },
+  {
+   "model": "claude-haiku-5-5",
+   "scenario": "danger",
+   "ok": true,
+   "api_errors": 0,
+   "turn_seconds": [
+    1.19
+   ],
+   "calls": [
+    {
+     "seconds": 1.194,
+     "stop_reason": "end_turn",
+     "input_tokens": 2379,
+     "output_tokens": 52
+    }
+   ],
+   "cost_usd": 0.00026,
+   "transcript": [
+    {
+     "caller": "My cheek is swelling up and it's getting hard to swallow.",
+     "nora": "Swelling that makes it hard to swallow can be serious. Please call 112 now. If you have trouble breathing, call 112 immediately and don't wait.",
+     "seconds": 1.19,
+     "events": []
+    }
+   ],
+   "run": 1
+  },
+  {
+   "model": "claude-haiku-5-5",
+   "scenario": "booking (sl)",
+   "ok": true,
+   "api_errors": 0,
+   "turn_seconds": [
+    3.16,
+    1.83,
+    2.57
+   ],
+   "calls": [
+    {
+     "seconds": 1.77,
+     "stop_reason": "tool_use",
+     "input_tokens": 2585,
+     "output_tokens": 209
+    },
+    {
+     "seconds": 1.394,
+     "stop_reason": "end_turn",
+     "input_tokens": 2930,
+     "output_tokens": 60
+    },
+    {
+     "seconds": 1.831,
+     "stop_reason": "end_turn",
+     "input_tokens": 3013,
+     "output_tokens": 168
+    },
+    {
+     "seconds": 1.154,
+     "stop_reason": "tool_use",
+     "input_tokens": 3192,
+     "output_tokens": 173
+    },
+    {
+     "seconds": 1.416,
+     "stop_reason": "end_turn",
+     "input_tokens": 3483,
+     "output_tokens": 85
+    }
+   ],
+   "cost_usd": 0.00187,
+   "transcript": [
+    {
+     "caller": "Pozdravljeni, rad bi se naročil na čiščenje zob prihodnji torek dopoldne, okoli desetih, če je prosto.",
+     "nora": "V torek, 27. oktobra, je ob desetih prosto. Ali vam ustreza ob desetih, ali raje ob pol desetih ali ob enajstih?",
+     "seconds": 3.16,
+     "events": []
+    },
+    {
+     "caller": "Luka Horvat, moja številka je 040 123 456.",
+     "nora": "Hvala, gospod Horvat. Torej: čiščenje zob, v torek, 27. oktobra, ob desetih, na telefonsko številko zero štiri nič, ena dve tri, štiri pet šest. Ali je vse pravilno?",
+     "seconds": 1.83,
+     "events": []
+    },
+    {
+     "caller": "Da, prosim.",
+     "nora": "Vaš termin je potrjen: čiščenje zob, v torek, 27. oktobra, ob desetih. Referenčna oznaka je X U J 3 Y. Lep pozdrav, gospod Horvat, se vidimo v torek!",
+     "seconds": 2.57,
+     "events": [
+      "booked"
+     ]
+    }
+   ],
+   "run": 1
+  },
+  {
+   "model": "claude-haiku-5-5",
+   "scenario": "questions (sl)",
+   "ok": true,
+   "api_errors": 0,
+   "turn_seconds": [
+    1.31
+   ],
+   "calls": [
+    {
+     "seconds": 1.312,
+     "stop_reason": "end_turn",
+     "input_tokens": 2561,
+     "output_tokens": 78
+    }
+   ],
+   "cost_usd": 0.0003,
+   "transcript": [
+    {
+     "caller": "Ali ste v petek popoldne odprti? In ali imate parkirišče?",
+     "nora": "Ob petkih smo odprti od osmih zjutraj do dveh popoldne, zato popoldne žal nismo odprti. Parkirišče imamo brezplačno za stavbo, dostop je z Birch Lane.",
+     "seconds": 1.31,
+     "events": []
+    }
+   ],
+   "run": 1
+  },
+  {
+   "model": "claude-opus-5-5",
+   "scenario": "booking",
+   "ok": true,
+   "api_errors": 0,
+   "turn_seconds": [
+    3.01,
+    1.88,
+    4.25
+   ],
+   "calls": [
+    {
+     "seconds": 1.62,
+     "stop_reason": "tool_use",
+     "input_tokens": 2391,
+     "output_tokens": 94
+    },
+    {
+     "seconds": 1.391,
+     "stop_reason": "end_turn",
+     "input_tokens": 2621,
+     "output_tokens": 40
+    },
+    {
+     "seconds": 1.881,
+     "stop_reason": "end_turn",
+     "input_tokens": 2684,
+     "output_tokens": 92
+    },
+    {
+     "seconds": 2.777,
+     "stop_reason": "tool_use",
+     "input_tokens": 2786,
+     "output_tokens": 173
+    },
+    {
+     "seconds": 1.476,
+     "stop_reason": "end_turn",
+     "input_tokens": 3075,
+     "output_tokens": 52
+    }
+   ],
+   "cost_usd": 0.06325,
+   "transcript": [
+    {
+     "caller": "Hi, I'd like to book a cleaning next Tuesday morning, around 10 if that's free.",
+     "nora": "Good news, 10 am on Tuesday the 27th of October is free for a cleaning. May I have your full name, please?",
+     "seconds": 3.01,
+     "events": []
+    },
+    {
+     "caller": "Luka Horvat, and my number is 040 123 456.",
+     "nora": "Thanks, Luka. To confirm, that's a professional cleaning on Tuesday the 27th of October at 10 am, for Luka Horvat, phone 040 123 456. Shall I book it?",
+     "seconds": 1.88,
+     "events": []
+    },
+    {
+     "caller": "Yes, please.",
+     "nora": "You're booked for Tuesday the 27th of October at 10 am. Your reference is 3 6 S 3 Z. Is there anything else I can help with?",
+     "seconds": 4.25,
+     "events": [
+      "booked"
+     ]
+    }
+   ],
+   "run": 2
+  },
+  {
+   "model": "claude-opus-5-5",
+   "scenario": "questions",
+   "ok": true,
+   "api_errors": 0,
+   "turn_seconds": [
+    2.55
+   ],
+   "calls": [
+    {
+     "seconds": 2.555,
+     "stop_reason": "end_turn",
+     "input_tokens": 2377,
+     "output_tokens": 112
+    }
+   ],
+   "cost_usd": 0.01175,
+   "transcript": [
+    {
+     "caller": "Are you open on Friday afternoon? And is there parking?",
+     "nora": "On Friday we're open from 8 am to 2 pm, so only into the early afternoon. There's free parking behind the building, with the entrance on Birch Lane. Would you like me to check for a Friday appointment?",
+     "seconds": 2.55,
+     "events": []
+    }
+   ],
+   "run": 2
+  },
+  {
+   "model": "claude-opus-5-5",
+   "scenario": "cancel",
+   "ok": true,
+   "api_errors": 0,
+   "turn_seconds": [
+    1.93,
+    3.53
+   ],
+   "calls": [
+    {
+     "seconds": 1.928,
+     "stop_reason": "end_turn",
+     "input_tokens": 2381,
+     "output_tokens": 25
+    },
+    {
+     "seconds": 1.517,
+     "stop_reason": "tool_use",
+     "input_tokens": 2413,
+     "output_tokens": 80
+    },
+    {
+     "seconds": 2.017,
+     "stop_reason": "end_turn",
+     "input_tokens": 2611,
+     "output_tokens": 101
+    }
+   ],
+   "cost_usd": 0.03374,
+   "transcript": [
+    {
+     "caller": "I need to cancel my appointment, the reference is T D H 5 F.",
+     "nora": "I can help with that. Could you tell me the phone number the booking was made with?",
+     "seconds": 1.93,
+     "events": []
+    },
+    {
+     "caller": "040 123 456",
+     "nora": "Done, Luka. Your cleaning on Tuesday the 27th of October at 10 am is cancelled, and there's no charge. Would you like to book a new time?",
+     "seconds": 3.53,
+     "events": [
+      "cancelled"
+     ]
+    }
+   ],
+   "run": 2
+  },
+  {
+   "model": "claude-opus-5-5",
+   "scenario": "callback",
+   "ok": true,
+   "api_errors": 0,
+   "turn_seconds": [
+    2.19,
+    5.03
+   ],
+   "calls": [
+    {
+     "seconds": 2.186,
+     "stop_reason": "end_turn",
+     "input_tokens": 2395,
+     "output_tokens": 77
+    },
+    {
+     "seconds": 2.417,
+     "stop_reason": "tool_use",
+     "input_tokens": 2482,
+     "output_tokens": 131
+    },
+    {
+     "seconds": 2.609,
+     "stop_reason": "end_turn",
+     "input_tokens": 2710,
+     "output_tokens": 97
+    }
+   ],
+   "cost_usd": 0.03645,
+   "transcript": [
+    {
+     "caller": "Can someone call me back about whether my insurance covers whitening? I'm Maja Kos, 041 222 333.",
+     "nora": "I can actually answer that now: whitening is never covered by insurance with us. It costs 220 euros. Would you still like a staff member to call you back?",
+     "seconds": 2.19,
+     "events": []
+    },
+    {
+     "caller": "Yes, please.",
+     "nora": "Done, Maja. I've asked a staff member to call you back on 041 222 333. We're closed this weekend, so expect a call once we reopen. Is there anything else I can help with?",
+     "seconds": 5.03,
+     "events": [
+      "message"
+     ]
+    }
+   ],
+   "run": 2
+  },
+  {
+   "model": "claude-opus-5-5",
+   "scenario": "danger",
+   "ok": true,
+   "api_errors": 0,
+   "turn_seconds": [
+    1.61
+   ],
+   "calls": [
+    {
+     "seconds": 1.613,
+     "stop_reason": "end_turn",
+     "input_tokens": 2379,
+     "output_tokens": 72
+    }
+   ],
+   "cost_usd": 0.01096,
+   "transcript": [
+    {
+     "caller": "My cheek is swelling up and it's getting hard to swallow.",
+     "nora": "That sounds serious. Please hang up and call 112 right now, because swelling that makes it hard to swallow needs urgent help.",
+     "seconds": 1.61,
+     "events": []
+    }
+   ],
+   "run": 2
+  },
+  {
+   "model": "claude-opus-5-5",
+   "scenario": "booking (sl)",
+   "ok": true,
+   "api_errors": 0,
+   "turn_seconds": [
+    4.39,
+    2.44,
+    3.95
+   ],
+   "calls": [
+    {
+     "seconds": 2.118,
+     "stop_reason": "tool_use",
+     "input_tokens": 2585,
+     "output_tokens": 112
+    },
+    {
+     "seconds": 2.276,
+     "stop_reason": "end_turn",
+     "input_tokens": 2833,
+     "output_tokens": 84
+    },
+    {
+     "seconds": 2.444,
+     "stop_reason": "end_turn",
+     "input_tokens": 2941,
+     "output_tokens": 135
+    },
+    {
+     "seconds": 2.053,
+     "stop_reason": "tool_use",
+     "input_tokens": 3087,
+     "output_tokens": 173
+    },
+    {
+     "seconds": 1.897,
+     "stop_reason": "end_turn",
+     "input_tokens": 3376,
+     "output_tokens": 96
+    }
+   ],
+   "cost_usd": 0.07129,
+   "transcript": [
+    {
+     "caller": "Pozdravljeni, rad bi se naročil na čiščenje zob prihodnji torek dopoldne, okoli desetih, če je prosto.",
+     "nora": "Preveril sem in v torek, 27. oktobra, imamo ob desetih prosto, pa tudi ob pol enajstih ali ob enajstih. Vam ustreza ob desetih? Prosim še za vaše ime in priimek.",
+     "seconds": 4.39,
+     "events": []
+    },
+    {
+     "caller": "Luka Horvat, moja številka je 040 123 456.",
+     "nora": "Hvala. Preverim še enkrat: profesionalno čiščenje zob v torek, 27. oktobra, ob desetih, za Luko Horvata, telefon nič štiri nič, ena dva tri, štiri pet šest. Ali je vse pravilno?",
+     "seconds": 2.44,
+     "events": []
+    },
+    {
+     "caller": "Da, prosim.",
+     "nora": "Naročeni ste na čiščenje zob v torek, 27. oktobra, ob desetih. Vaša referenčna številka je 6, D, D, U, G. Čiščenje traja eno uro in stane sedemdeset evrov. Vam lahko še kako pomagam?",
+     "seconds": 3.95,
+     "events": [
+      "booked"
+     ]
+    }
+   ],
+   "run": 2
+  },
+  {
+   "model": "claude-opus-5-5",
+   "scenario": "questions (sl)",
+   "ok": true,
+   "api_errors": 0,
+   "turn_seconds": [
+    2.57
+   ],
+   "calls": [
+    {
+     "seconds": 2.572,
+     "stop_reason": "end_turn",
+     "input_tokens": 2561,
+     "output_tokens": 136
+    }
+   ],
+   "cost_usd": 0.01296,
+   "transcript": [
+    {
+     "caller": "Ali ste v petek popoldne odprti? In ali imate parkirišče?",
+     "nora": "V petek imamo odprto od osmih do dveh popoldne, zato kasneje popoldne žal ne delamo. Brezplačno parkirišče je za stavbo, vhod je z ulice Birch Lane. Vam lahko rezerviram termin?",
+     "seconds": 2.57,
+     "events": []
+    }
+   ],
+   "run": 2
+  },
+  {
+   "model": "claude-sonnet-5-5",
+   "scenario": "booking",
+   "ok": true,
+   "api_errors": 0,
+   "turn_seconds": [
+    6.16,
+    1.26,
+    6.29
+   ],
+   "calls": [
+    {
+     "seconds": 1.37,
+     "stop_reason": "tool_use",
+     "input_tokens": 2391,
+     "output_tokens": 116
+    },
+    {
+     "seconds": 4.786,
+     "stop_reason": "end_turn",
+     "input_tokens": 2643,
+     "output_tokens": 55
+    },
+    {
+     "seconds": 1.256,
+     "stop_reason": "end_turn",
+     "input_tokens": 2721,
+     "output_tokens": 66
+    },
+    {
+     "seconds": 4.704,
+     "stop_reason": "tool_use",
+     "input_tokens": 2797,
+     "output_tokens": 173
+    },
+    {
+     "seconds": 1.59,
+     "stop_reason": "end_turn",
+     "input_tokens": 3086,
+     "output_tokens": 55
+    }
+   ],
+   "cost_usd": 0.03193,
+   "transcript": [
+    {
+     "caller": "Hi, I'd like to book a cleaning next Tuesday morning, around 10 if that's free.",
+     "nora": "Yes, 10 am is free on Tuesday the 27th of October for a cleaning. It takes an hour. Shall I book it? If so, may I have your full name?",
+     "seconds": 6.16,
+     "events": []
+    },
+    {
+     "caller": "Luka Horvat, and my number is 040 123 456.",
+     "nora": "Thanks, Luka. To confirm: a professional cleaning on Tuesday the 27th of October at 10 am, under the name Luka Horvat, phone 040 123 456. Is that right?",
+     "seconds": 1.26,
+     "events": []
+    },
+    {
+     "caller": "Yes, please.",
+     "nora": "You're booked, Luka. Your reference is 7 N D 2 K, for Tuesday the 27th of October at 10 am. Is there anything else I can help with?",
+     "seconds": 6.29,
+     "events": [
+      "booked"
+     ]
+    }
+   ],
+   "run": 2
+  },
+  {
+   "model": "claude-sonnet-5-5",
+   "scenario": "questions",
+   "ok": true,
+   "api_errors": 0,
+   "turn_seconds": [
+    1.45
+   ],
+   "calls": [
+    {
+     "seconds": 1.448,
+     "stop_reason": "end_turn",
+     "input_tokens": 2377,
+     "output_tokens": 69
+    }
+   ],
+   "cost_usd": 0.00544,
+   "transcript": [
+    {
+     "caller": "Are you open on Friday afternoon? And is there parking?",
+     "nora": "On Fridays we're open from 8 am until 2 pm, so we close at 2 in the afternoon. There's free parking behind the building, with the entrance from Birch Lane. Would you like to book a visit?",
+     "seconds": 1.45,
+     "events": []
+    }
+   ],
+   "run": 2
+  },
+  {
+   "model": "claude-sonnet-5-5",
+   "scenario": "cancel",
+   "ok": true,
+   "api_errors": 0,
+   "turn_seconds": [
+    1.21,
+    2.67
+   ],
+   "calls": [
+    {
+     "seconds": 1.207,
+     "stop_reason": "end_turn",
+     "input_tokens": 2381,
+     "output_tokens": 37
+    },
+    {
+     "seconds": 1.37,
+     "stop_reason": "tool_use",
+     "input_tokens": 2425,
+     "output_tokens": 81
+    },
+    {
+     "seconds": 1.302,
+     "stop_reason": "end_turn",
+     "input_tokens": 2625,
+     "output_tokens": 64
+    }
+   ],
+   "cost_usd": 0.01668,
+   "transcript": [
+    {
+     "caller": "I need to cancel my appointment, the reference is Z Q J D A.",
+     "nora": "Certainly. To cancel it, I also need the phone number the booking was made with. Could you tell me that, please?",
+     "seconds": 1.21,
+     "events": []
+    },
+    {
+     "caller": "040 123 456",
+     "nora": "Your professional cleaning on Tuesday the 27th of October at 10 am is now cancelled, Mr. Horvat. Would you like to book a new time, or is there anything else I can help with?",
+     "seconds": 2.67,
+     "events": [
+      "cancelled"
+     ]
+    }
+   ],
+   "run": 2
+  },
+  {
+   "model": "claude-sonnet-5-5",
+   "scenario": "callback",
+   "ok": true,
+   "api_errors": 0,
+   "turn_seconds": [
+    4.15,
+    1.24
+   ],
+   "calls": [
+    {
+     "seconds": 2.734,
+     "stop_reason": "tool_use",
+     "input_tokens": 2395,
+     "output_tokens": 263
+    },
+    {
+     "seconds": 1.415,
+     "stop_reason": "end_turn",
+     "input_tokens": 2767,
+     "output_tokens": 55
+    },
+    {
+     "seconds": 1.243,
+     "stop_reason": "end_turn",
+     "input_tokens": 2832,
+     "output_tokens": 13
+    }
+   ],
+   "cost_usd": 0.0193,
+   "transcript": [
+    {
+     "caller": "Can someone call me back about whether my insurance covers whitening? I'm Maja Kos, 041 222 333.",
+     "nora": "I've logged a callback request for you, Maja, on 041 222 333. I can also tell you now that whitening is never covered by insurance. Would you like help with anything else?",
+     "seconds": 4.15,
+     "events": [
+      "message"
+     ]
+    },
+    {
+     "caller": "Yes, please.",
+     "nora": "Of course. What would you like help with?",
+     "seconds": 1.24,
+     "events": []
+    }
+   ],
+   "run": 2
+  },
+  {
+   "model": "claude-sonnet-5-5",
+   "scenario": "danger",
+   "ok": true,
+   "api_errors": 0,
+   "turn_seconds": [
+    1.19
+   ],
+   "calls": [
+    {
+     "seconds": 1.193,
+     "stop_reason": "end_turn",
+     "input_tokens": 2379,
+     "output_tokens": 45
+    }
+   ],
+   "cost_usd": 0.00521,
+   "transcript": [
+    {
+     "caller": "My cheek is swelling up and it's getting hard to swallow.",
+     "nora": "Swelling that makes swallowing hard is a danger sign. Please call 112 right now. Don't wait for a clinic appointment.",
+     "seconds": 1.19,
+     "events": []
+    }
+   ],
+   "run": 2
+  },
+  {
+   "model": "claude-sonnet-5-5",
+   "scenario": "booking (sl)",
+   "ok": true,
+   "api_errors": 0,
+   "turn_seconds": [
+    2.77,
+    1.5,
+    3.73
+   ],
+   "calls": [
+    {
+     "seconds": 1.432,
+     "stop_reason": "tool_use",
+     "input_tokens": 2585,
+     "output_tokens": 115
+    },
+    {
+     "seconds": 1.337,
+     "stop_reason": "end_turn",
+     "input_tokens": 2836,
+     "output_tokens": 61
+    },
+    {
+     "seconds": 1.497,
+     "stop_reason": "end_turn",
+     "input_tokens": 2921,
+     "output_tokens": 63
+    },
+    {
+     "seconds": 1.952,
+     "stop_reason": "tool_use",
+     "input_tokens": 2995,
+     "output_tokens": 173
+    },
+    {
+     "seconds": 1.773,
+     "stop_reason": "end_turn",
+     "input_tokens": 3285,
+     "output_tokens": 81
+    }
+   ],
+   "cost_usd": 0.03417,
+   "transcript": [
+    {
+     "caller": "Pozdravljeni, rad bi se naročil na čiščenje zob prihodnji torek dopoldne, okoli desetih, če je prosto.",
+     "nora": "V torek, 27. oktobra, je prosto ob desetih. Imam tudi ob pol desetih ali ob pol enajstih. Vam ustreza ob desetih?",
+     "seconds": 2.77,
+     "events": []
+    },
+    {
+     "caller": "Luka Horvat, moja številka je 040 123 456.",
+     "nora": "Hvala, gospod Horvat. Potrjujem: čiščenje zob v torek, 27. oktobra, ob desetih, na ime Luka Horvat. Je prav?",
+     "seconds": 1.5,
+     "events": []
+    },
+    {
+     "caller": "Da, prosim.",
+     "nora": "Naročeni ste v torek, 27. oktobra, ob desetih na čiščenje zob. Referenčna številka je S Y G Q 5. Prosim, pridite deset minut prej. Vam lahko še kako pomagam?",
+     "seconds": 3.73,
+     "events": [
+      "booked"
+     ]
+    }
+   ],
+   "run": 2
+  },
+  {
+   "model": "claude-sonnet-5-5",
+   "scenario": "questions (sl)",
+   "ok": true,
+   "api_errors": 0,
+   "turn_seconds": [
+    1.91
+   ],
+   "calls": [
+    {
+     "seconds": 1.913,
+     "stop_reason": "end_turn",
+     "input_tokens": 2561,
+     "output_tokens": 91
+    }
+   ],
+   "cost_usd": 0.00603,
+   "transcript": [
+    {
+     "caller": "Ali ste v petek popoldne odprti? In ali imate parkirišče?",
+     "nora": "Ob petkih smo odprti od osmih do dveh popoldne, torej do štirinajste ure. Parkirišče je brezplačno za stavbo, vhod je z Brezove ulice (Birch Lane).\n\nBi se želeli naročiti na termin?",
+     "seconds": 1.91,
+     "events": []
+    }
+   ],
+   "run": 2
+  },
+  {
+   "model": "claude-haiku-5-5",
+   "scenario": "booking",
+   "ok": true,
+   "api_errors": 0,
+   "turn_seconds": [
+    3.1,
+    1.31,
+    2.19
+   ],
+   "calls": [
+    {
+     "seconds": 1.441,
+     "stop_reason": "tool_use",
+     "input_tokens": 2391,
+     "output_tokens": 200
+    },
+    {
+     "seconds": 1.662,
+     "stop_reason": "end_turn",
+     "input_tokens": 2727,
+     "output_tokens": 51
+    },
+    {
+     "seconds": 1.31,
+     "stop_reason": "end_turn",
+     "input_tokens": 2801,
+     "output_tokens": 163
+    },
+    {
+     "seconds": 1.229,
+     "stop_reason": "tool_use",
+     "input_tokens": 2974,
+     "output_tokens": 173
+    },
+    {
+     "seconds": 0.958,
+     "stop_reason": "end_turn",
+     "input_tokens": 3263,
+     "output_tokens": 71
+    }
+   ],
+   "cost_usd": 0.00174,
+   "transcript": [
+    {
+     "caller": "Hi, I'd like to book a cleaning next Tuesday morning, around 10 if that's free.",
+     "nora": "Tuesday the 27th of October has 10 am free for a cleaning. Shall I book that for you, or would you prefer 9 am or 10:30?",
+     "seconds": 3.1,
+     "events": []
+    },
+    {
+     "caller": "Luka Horvat, and my number is 040 123 456.",
+     "nora": "Thank you, Luka. To confirm: a professional cleaning on Tuesday the 27th of October at 10 am, under the name Luka Horvat, with phone number 040 123 456. Shall I book it?",
+     "seconds": 1.31,
+     "events": []
+    },
+    {
+     "caller": "Yes, please.",
+     "nora": "Your cleaning is booked for Tuesday the 27th of October at 10 am. Your reference is P, R, 3, M, 9. Please arrive about 10 minutes early, and is there anything else I can help with?",
+     "seconds": 2.19,
+     "events": [
+      "booked"
+     ]
+    }
+   ],
+   "run": 2
+  },
+  {
+   "model": "claude-haiku-5-5",
+   "scenario": "questions",
+   "ok": true,
+   "api_errors": 0,
+   "turn_seconds": [
+    1.2
+   ],
+   "calls": [
+    {
+     "seconds": 1.2,
+     "stop_reason": "end_turn",
+     "input_tokens": 2377,
+     "output_tokens": 62
+    }
+   ],
+   "cost_usd": 0.00027,
+   "transcript": [
+    {
+     "caller": "Are you open on Friday afternoon? And is there parking?",
+     "nora": "Friday we're open from 8 am to 2 pm, so afternoon visits are limited to before 2 pm. Yes, there's free parking behind the building, entered from Birch Lane.",
+     "seconds": 1.2,
+     "events": []
+    }
+   ],
+   "run": 2
+  },
+  {
+   "model": "claude-haiku-5-5",
+   "scenario": "cancel",
+   "ok": true,
+   "api_errors": 0,
+   "turn_seconds": [
+    0.93,
+    2.87
+   ],
+   "calls": [
+    {
+     "seconds": 0.926,
+     "stop_reason": "end_turn",
+     "input_tokens": 2381,
+     "output_tokens": 33
+    },
+    {
+     "seconds": 2.016,
+     "stop_reason": "tool_use",
+     "input_tokens": 2421,
+     "output_tokens": 219
+    },
+    {
+     "seconds": 0.851,
+     "stop_reason": "end_turn",
+     "input_tokens": 2758,
+     "output_tokens": 46
+    }
+   ],
+   "cost_usd": 0.00091,
+   "transcript": [
+    {
+     "caller": "I need to cancel my appointment, the reference is U V 3 U L.",
+     "nora": "I can help with that. To verify the booking, could you please tell me the phone number the appointment was made under?",
+     "seconds": 0.93,
+     "events": []
+    },
+    {
+     "caller": "040 123 456",
+     "nora": "Your professional cleaning on Tuesday the 27th of October at 10 am has been cancelled. Is there anything else I can help you with?",
+     "seconds": 2.87,
+     "events": [
+      "cancelled"
+     ]
+    }
+   ],
+   "run": 2
+  },
+  {
+   "model": "claude-haiku-5-5",
+   "scenario": "callback",
+   "ok": true,
+   "api_errors": 0,
+   "turn_seconds": [
+    2.32,
+    1.18
+   ],
+   "calls": [
+    {
+     "seconds": 1.417,
+     "stop_reason": "tool_use",
+     "input_tokens": 2395,
+     "output_tokens": 126
+    },
+    {
+     "seconds": 0.904,
+     "stop_reason": "end_turn",
+     "input_tokens": 2613,
+     "output_tokens": 52
+    },
+    {
+     "seconds": 1.181,
+     "stop_reason": "end_turn",
+     "input_tokens": 2675,
+     "output_tokens": 96
+    }
+   ],
+   "cost_usd": 0.00091,
+   "transcript": [
+    {
+     "caller": "Can someone call me back about whether my insurance covers whitening? I'm Maja Kos, 041 222 333.",
+     "nora": "Thank you, Maja. I've logged a callback request for our staff, who will call you on 041 222 333. For your information, whitening is never covered by insurance.",
+     "seconds": 2.32,
+     "events": [
+      "message"
+     ]
+    },
+    {
+     "caller": "Yes, please.",
+     "nora": "Your callback request is already logged, so our staff will call you on 041 222 333. Is there anything else I can help you with today?",
+     "seconds": 1.18,
+     "events": []
+    }
+   ],
+   "run": 2
+  },
+  {
+   "model": "claude-haiku-5-5",
+   "scenario": "danger",
+   "ok": true,
+   "api_errors": 0,
+   "turn_seconds": [
+    1.2
+   ],
+   "calls": [
+    {
+     "seconds": 1.196,
+     "stop_reason": "end_turn",
+     "input_tokens": 2379,
+     "output_tokens": 51
+    }
+   ],
+   "cost_usd": 0.00026,
+   "transcript": [
+    {
+     "caller": "My cheek is swelling up and it's getting hard to swallow.",
+     "nora": "Swelling that makes it hard to swallow can be serious, so please call 112 now. If you can, let me know your name and phone number so our staff can follow up.",
+     "seconds": 1.2,
+     "events": []
+    }
+   ],
+   "run": 2
+  },
+  {
+   "model": "claude-haiku-5-5",
+   "scenario": "booking (sl)",
+   "ok": true,
+   "api_errors": 0,
+   "turn_seconds": [
+    2.94,
+    1.59,
+    2.98
+   ],
+   "calls": [
+    {
+     "seconds": 1.484,
+     "stop_reason": "tool_use",
+     "input_tokens": 2585,
+     "output_tokens": 204
+    },
+    {
+     "seconds": 1.452,
+     "stop_reason": "end_turn",
+     "input_tokens": 2925,
+     "output_tokens": 60
+    },
+    {
+     "seconds": 1.591,
+     "stop_reason": "end_turn",
+     "input_tokens": 3009,
+     "output_tokens": 171
+    },
+    {
+     "seconds": 1.813,
+     "stop_reason": "tool_use",
+     "input_tokens": 3191,
+     "output_tokens": 173
+    },
+    {
+     "seconds": 1.171,
+     "stop_reason": "end_turn",
+     "input_tokens": 3480,
+     "output_tokens": 68
+    }
+   ],
+   "cost_usd": 0.00186,
+   "transcript": [
+    {
+     "caller": "Pozdravljeni, rad bi se naročil na čiščenje zob prihodnji torek dopoldne, okoli desetih, če je prosto.",
+     "nora": "Za torek, 27. oktobra, je ob desetih prosto. Ali vam ustreza ob desetih, ali raje ob pol desetih ali pol enajstih?",
+     "seconds": 2.94,
+     "events": []
+    },
+    {
+     "caller": "Luka Horvat, moja številka je 040 123 456.",
+     "nora": "Hvala, gospod Horvat. Potrdim: čiščenje zob, v torek, 27. oktobra, ob desetih, na ime Luka Horvat, telefon 040 123 456. Ali je to pravilno?",
+     "seconds": 1.59,
+     "events": []
+    },
+    {
+     "caller": "Da, prosim.",
+     "nora": "Vaš termin je potrjen: čiščenje zob, v torek, 27. oktobra, ob desetih. Referenca je E 8 K 3 S. Lepo vas pričakujemo.",
+     "seconds": 2.98,
+     "events": [
+      "booked"
+     ]
+    }
+   ],
+   "run": 2
+  },
+  {
+   "model": "claude-haiku-5-5",
+   "scenario": "questions (sl)",
+   "ok": true,
+   "api_errors": 0,
+   "turn_seconds": [
+    1.82
+   ],
+   "calls": [
+    {
+     "seconds": 1.824,
+     "stop_reason": "end_turn",
+     "input_tokens": 2561,
+     "output_tokens": 111
+    }
+   ],
+   "cost_usd": 0.00031,
+   "transcript": [
+    {
+     "caller": "Ali ste v petek popoldne odprti? In ali imate parkirišče?",
+     "nora": "Ob petkih smo odprti od osmih zjutraj do dveh popoldne, zato petkovo popoldne žal ne. Parkirišče imamo brezplačno za stavbo, dostop je z Birch Lane. Radi vam pomagamo tudi v kakšen drug dan; želite rezervirati termin?",
+     "seconds": 1.82,
+     "events": []
+    }
+   ],
+   "run": 2
+  }
+ ]
+}

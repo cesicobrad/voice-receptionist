@@ -1,6 +1,6 @@
 // Voice loop: mic -> /api/stt -> /api/chat -> /api/tts -> speaker.
 const $ = (id) => document.getElementById(id);
-const state = { session: null, sttOnServer: true, recorder: null, audio: null, busy: false };
+const state = { session: null, sttOnServer: true, recorder: null, audio: null, busy: false, lang: "en-GB" };
 
 const SILENCE_MS = 1200;   // stop after this much quiet once speech was heard
 const MAX_RECORD_MS = 20000;
@@ -62,7 +62,7 @@ function browserSpeak(text) {
   if (!window.speechSynthesis) return Promise.resolve();
   return new Promise((resolve) => {
     const u = new SpeechSynthesisUtterance(text);
-    u.lang = "en-GB";
+    u.lang = state.lang;
     u.onend = u.onerror = resolve;
     speechSynthesis.speak(u);
   });
@@ -177,7 +177,7 @@ function browserRecognition() {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) { setStatus("No speech-to-text available here. Type below instead."); return; }
   const rec = new SR();
-  rec.lang = "en-GB";
+  rec.lang = state.lang;
   rec.onresult = (e) => send(e.results[0][0].transcript);
   rec.onend = () => { $("mic").classList.remove("recording"); state.recorder = null; };
   state.recorder = { state: "recording", stop: () => rec.stop() };
@@ -231,9 +231,11 @@ async function startCall() {
     const s = await (await api("/api/session")).json();
     state.session = s.session_id;
     state.sttOnServer = s.stt;
+    state.lang = s.language === "sl" ? "sl-SI" : "en-GB";
     $("assistant-name").textContent = s.assistant;
     $("business").textContent = s.business;
     $("mode").textContent = s.mode === "claude" ? `Claude · ${s.model}` : "Offline demo brain";
+    if (s.language === "sl") $("mode").textContent += " · slovenščina";
     $("mode").classList.toggle("offline", s.mode !== "claude");
     $("start").classList.add("hidden");
     $("talk").classList.remove("hidden");

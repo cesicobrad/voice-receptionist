@@ -19,7 +19,7 @@ from pydantic import BaseModel, Field
 
 load_dotenv()
 
-from .assistant import make_receptionist  # noqa: E402  (reads env set by .env)
+from .assistant import claude_enabled, make_receptionist, requested_language  # noqa: E402  (reads env set by .env)
 from .booking import BookingService  # noqa: E402
 from .speech import Transcriber, synthesize  # noqa: E402
 
@@ -44,14 +44,18 @@ def create_app(db_path: str | None = None, transcriber: Transcriber | None = Non
     if db_path != ":memory:":
         Path(db_path).parent.mkdir(parents=True, exist_ok=True)
     bookings = BookingService(db_path, now=now)
-    stt = transcriber or Transcriber()
+    language = requested_language()
+    if language == "sl" and not claude_enabled():
+        logging.getLogger("receptionist").warning("Slovenian needs Claude; the offline brain is English-only. Using English.")
+        language = "en"
+    stt = transcriber or Transcriber(language=language)
     sessions: OrderedDict[str, tuple] = OrderedDict()
     app = FastAPI(title="Voice receptionist demo")
     app.state.bookings = bookings
 
     @app.post("/api/session")
     def new_session():
-        receptionist = make_receptionist(bookings)
+        receptionist = make_receptionist(bookings, language)
         sid = secrets.token_urlsafe(12)
         sessions[sid] = (receptionist, threading.Lock())
         while len(sessions) > MAX_SESSIONS:
@@ -64,6 +68,7 @@ def create_app(db_path: str | None = None, transcriber: Transcriber | None = Non
             "business": bookings.clinic["business"],
             "assistant": bookings.clinic["assistant"],
             "stt": stt.available,
+            "language": language,
         }
 
     @app.post("/api/chat")
@@ -95,7 +100,7 @@ def create_app(db_path: str | None = None, transcriber: Transcriber | None = Non
     @app.post("/api/tts")
     async def text_to_speech(body: SpeakIn):
         try:
-            audio = await synthesize(body.text)
+            audio = await synthesize(body.text, language)
         except Exception as err:  # offline, service hiccup: the page still shows the text
             logging.getLogger("speech").warning("TTS failed: %s", err)
             raise HTTPException(502, "Text-to-speech unavailable")
