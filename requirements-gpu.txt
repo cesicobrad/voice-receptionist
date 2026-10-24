@@ -1,0 +1,4 @@
+# Optional: NVIDIA libraries so faster-whisper runs on the GPU (Windows/Linux, CUDA 12).
+# Without them Whisper falls back to the CPU, which is about 15-30x slower.
+nvidia-cublas-cu12
+nvidia-cudnn-cu12==9.*

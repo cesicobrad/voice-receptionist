@@ -37,6 +37,7 @@ class Transcriber:
             return False
 
     def _load(self):
+        _add_nvidia_dlls()
         from faster_whisper import WhisperModel
 
         attempts = [("cuda", "float16"), ("cpu", "int8")] if self.device == "auto" else \
@@ -67,6 +68,21 @@ class Transcriber:
                 initial_prompt=STT_PROMPTS[self.language],
             )
             return " ".join(s.text.strip() for s in segments).strip()
+
+
+def _add_nvidia_dlls():
+    """Windows: let CTranslate2 find cuBLAS/cuDNN from the nvidia-* pip wheels (requirements-gpu.txt)."""
+    if os.name != "nt":
+        return
+    import glob
+    import site
+    import sys
+
+    roots = [*site.getsitepackages(), site.getusersitepackages(), *sys.path]
+    for bin_dir in {d for r in roots for d in glob.glob(os.path.join(r, "nvidia", "*", "bin"))}:
+        os.add_dll_directory(bin_dir)
+        if bin_dir not in os.environ.get("PATH", ""):
+            os.environ["PATH"] = bin_dir + os.pathsep + os.environ.get("PATH", "")
 
 
 def _silence_wav(seconds: float = 0.5, rate: int = 16000) -> bytes:

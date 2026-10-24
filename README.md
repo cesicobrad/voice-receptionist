@@ -145,7 +145,7 @@ flowchart LR
 
 ## Run it
 
-You need Python 3.10 or newer. A CUDA GPU is optional (Whisper falls back to CPU).
+You need Python 3.10 or newer. A CUDA GPU is optional (Whisper falls back to CPU). To use an NVIDIA GPU, also run `pip install -r requirements-gpu.txt`: without it Whisper can't find cuBLAS/cuDNN and quietly uses the CPU (6.5 s instead of 0.2 s per Slovenian sentence on an RTX 5070).
 
 ```bash
 python -m venv .venv
