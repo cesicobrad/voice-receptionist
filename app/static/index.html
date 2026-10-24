@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Voice Receptionist</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <main class="layout">
+    <section class="call" aria-label="Call">
+      <header class="call-head">
+        <div class="avatar" aria-hidden="true">N</div>
+        <div>
+          <h1 id="assistant-name">Nora</h1>
+          <p class="sub"><span id="business">Lindenvale Dental</span> · virtual receptionist</p>
+        </div>
+        <span class="badge" id="mode" title="Which brain is answering">…</span>
+      </header>
+
+      <ol class="transcript" id="transcript" aria-live="polite"></ol>
+
+      <footer class="controls">
+        <button class="start" id="start">Start call</button>
+        <div class="talk hidden" id="talk">
+          <button class="mic" id="mic" aria-label="Talk">
+            <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path fill="currentColor" d="M12 15a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-2.08A7 7 0 0 0 19 12h-2Z"/></svg>
+            <span class="ring" id="ring"></span>
+          </button>
+          <p class="status" id="status">Tap the mic or hold Space to talk</p>
+        </div>
+        <form class="type" id="type-form" autocomplete="off">
+          <input id="type-input" placeholder="…or type a message" aria-label="Type a message" disabled>
+          <button type="submit" disabled id="type-send">Send</button>
+        </form>
+      </footer>
+    </section>
+
+    <aside class="desk" aria-label="Front desk">
+      <h2>Front desk</h2>
+      <p class="hint">What the receptionist wrote to the clinic's store, live.</p>
+      <h3>Upcoming appointments</h3>
+      <ul class="cards" id="appointments"><li class="empty">None yet</li></ul>
+      <h3>Callback requests</h3>
+      <ul class="cards" id="messages"><li class="empty">None yet</li></ul>
+      <details class="try">
+        <summary>Things to try</summary>
+        <ul>
+          <li>"I'd like to book a cleaning on Thursday."</li>
+          <li>"What are your opening hours on Friday?"</li>
+          <li>"I have a toothache, can I come in today?"</li>
+          <li>"Please cancel my appointment, reference K 7 M P Q."</li>
+          <li>"Can someone call me back about my insurance?"</li>
+        </ul>
+      </details>
+    </aside>
+  </main>
+  <script src="/static/app.js"></script>
+</body>
+</html>

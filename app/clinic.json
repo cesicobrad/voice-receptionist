@@ -1,0 +1,24 @@
+{
+  "business": "Lindenvale Dental",
+  "assistant": "Nora",
+  "phone": "+386 1 555 0142",
+  "address": "Linden Street 14, Lindenvale (2nd floor, lift available)",
+  "slot_minutes": 30,
+  "booking_horizon_days": 60,
+  "hours": {
+    "monday":    ["08:00", "18:00"],
+    "tuesday":   ["08:00", "18:00"],
+    "wednesday": ["10:00", "19:00"],
+    "thursday":  ["08:00", "18:00"],
+    "friday":    ["08:00", "14:00"],
+    "saturday":  null,
+    "sunday":    null
+  },
+  "services": {
+    "checkup":   {"label": "Check-up and X-ray",       "minutes": 30, "price_eur": 45,  "keywords": ["checkup", "check-up", "check up", "exam", "examination", "x-ray", "xray"]},
+    "cleaning":  {"label": "Professional cleaning",    "minutes": 60, "price_eur": 70,  "keywords": ["cleaning", "clean", "hygiene", "scale", "polish"]},
+    "filling":   {"label": "Filling",                  "minutes": 60, "price_eur": 90,  "keywords": ["filling", "cavity", "cavities", "hole"]},
+    "whitening": {"label": "Teeth whitening",          "minutes": 90, "price_eur": 220, "keywords": ["whitening", "whiten", "white", "bleach"]},
+    "emergency": {"label": "Emergency visit (pain, swelling, broken tooth)", "minutes": 30, "price_eur": 60, "keywords": ["emergency", "pain", "hurts", "ache", "toothache", "swelling", "broken", "chipped", "urgent"]}
+  }
+}
