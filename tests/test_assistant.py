@@ -26,6 +26,8 @@ def test_parse_date(text, expected):
     ("half past nine", False, "09:30"),
     ("Nine.", True, "09:00"),
     ("noon", False, "12:00"),
+    ("around 10 if that's free", False, "10:00"),
+    ("at about 11", False, "11:00"),
     ("on the 5th of November", False, None),
     ("my number is 041 555 123", False, None),
 ])
@@ -59,6 +61,17 @@ def test_scripted_answers_questions_and_escalates_danger(svc):
     assert "Friday 08:00 to 14:00" in bot.respond("What are your opening hours?").reply
     assert "70 euros" in bot.respond("How much is a cleaning?").reply
     assert "112" in bot.respond("My face is swollen and I can't breathe").reply
+    assert "112" in bot.respond("My cheek is swelling up and it's getting hard to swallow.").reply
+    both = bot.respond("Are you open on Friday afternoon? And is there parking?").reply
+    assert "Friday 08:00 to 14:00" in both and "parking" in both
+    assert "parking" not in bot.respond("Can I pay by card?").reply
+
+
+def test_scripted_booking_in_one_breath(svc):
+    bot = ScriptedReceptionist(svc)
+    assert "full name" in bot.respond("I'd like to book a cleaning on Tuesday, around 10 if that's free.").reply
+    assert "You're booked" in bot.respond("Luka Horvat, and my number is 040 123 456.").reply
+    assert svc.upcoming()[0]["name"] == "Luka Horvat"
 
 
 def test_scripted_cancel_and_message(svc):

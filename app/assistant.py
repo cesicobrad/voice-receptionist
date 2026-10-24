@@ -274,7 +274,7 @@ def parse_time(text: str, expecting: bool = False) -> str | None:
         hour, minute, ampm = int(m[1]), int(m[2]), m[3] or ""
     elif m := re.search(rf"\b(\d{{1,2}})\s*{AMPM}", t):
         hour, minute, ampm = int(m[1]), 0, m[2]
-    elif m := re.search(r"\bat (\d{1,2})\b(?!\s*(?:st|nd|rd|th|of|\d))", t):
+    elif m := re.search(r"\b(?:at|around|about)\s+(?:around\s+|about\s+)?(\d{1,2})\b(?!\s*(?:st|nd|rd|th|of|\d))", t):
         hour, minute = int(m[1]), 0
     elif expecting and (m := re.fullmatch(r"\D*?(\d{1,2})\W*", t)):
         hour, minute = int(m[1]), 0
@@ -308,6 +308,9 @@ def parse_name(text: str, expecting: bool = False) -> str | None:
         return name.strip()
     if expecting and re.fullmatch(r"[A-Za-zÀ-ž'\-]+(?:\s+[A-Za-zÀ-ž'\-]+){0,2}", t):
         return t
+    # "Luka Horvat, and my number is 040 123 456"
+    if expecting and (m := re.match(r"([A-Za-zÀ-ž'\-]+(?:\s+[A-Za-zÀ-ž'\-]+){0,2})\s*(?:,|\band\b)", t)):
+        return m[1]
     return None
 
 
@@ -347,7 +350,9 @@ class ScriptedReceptionist:
     def respond(self, text: str) -> Turn:
         t = text.lower().strip()
         today = self.bookings.now().date()
-        if has(t, "112") or (has(t, "bleeding") and has(t, "heav", "a lot", "won't stop")) or has(t, "can't breathe", "cannot breathe"):
+        if has(t, "112") or (has(t, "bleeding") and has(t, "heav", "a lot", "won't stop")) or has(t, "can't breathe", "cannot breathe", "hard to breathe", "trouble breathing",
+                     "difficulty breathing", "hard to swallow", "can't swallow", "cannot swallow",
+                     "trouble swallowing", "difficulty swallowing"):
             self.reset()
             return Turn("That sounds serious. Please hang up and call 112 right now.")
         if self.task is None:
@@ -375,26 +380,33 @@ class ScriptedReceptionist:
         c = self.clinic
         if has(t, "thank", "bye", "goodbye", "that's all", "that is all"):
             return "You're welcome. Have a good day, and goodbye."
+        # Answer every topic in the question ("Are you open Friday? And is there parking?")
+        answers = []
         if has(t, "hour", "open", "close", "when are you"):
-            return f"We're open {hours_sentence(c)}."
+            answers.append(f"We're open {hours_sentence(c)}.")
         if has(t, "price", "cost", "how much", "expensive", "fee"):
             svc = self.find_service(t)
             if svc:
                 s = c["services"][svc]
-                return f"A {s['label'].lower()} is {s['price_eur']} euros and takes about {s['minutes']} minutes."
-            return "A check-up is 45 euros, a cleaning 70, a filling 90 and whitening 220 euros. Would you like to book one?"
+                answers.append(f"A {s['label'].lower()} is {s['price_eur']} euros and takes about {s['minutes']} minutes.")
+            else:
+                answers.append("A check-up is 45 euros, a cleaning 70, a filling 90 and whitening 220 euros.")
         if has(t, "where", "address", "located", "find you", "location"):
-            return f"We're at {c['address']}."
-        if has(t, "park", "bus", "car"):
-            return "There's free parking behind the building, entrance from Birch Lane. Buses 3 and 7 stop at Linden Square, two minutes away."
+            answers.append(f"We're at {c['address']}.")
+        if has(t, "park", "bus", r"car\b"):
+            answers.append("There's free parking behind the building, entrance from Birch Lane. "
+                           "Buses 3 and 7 stop at Linden Square, two minutes away.")
         if has(t, "insurance", "insured", "covered"):
-            return "We accept the national health insurance for check-ups and fillings. Whitening is not covered. Please bring your insurance card."
+            answers.append("We accept the national health insurance for check-ups and fillings. "
+                           "Whitening is not covered. Please bring your insurance card.")
         if has(t, "pay", "card", "cash"):
-            return "You can pay by card, cash or bank transfer after the visit."
+            answers.append("You can pay by card, cash or bank transfer after the visit.")
         if has(t, "child", "kid", "son", "daughter"):
-            return "We see children from age three, with a parent present."
+            answers.append("We see children from age three, with a parent present.")
         if has(t, "new patient", "first time", "first visit"):
-            return "New patients are welcome. Please arrive ten minutes early to fill in a short health form."
+            answers.append("New patients are welcome. Please arrive ten minutes early to fill in a short health form.")
+        if answers:
+            return " ".join(answers)
         if has(t, "hello", "hi", "good morning", "good afternoon", "hey"):
             return "Hello. I can book or cancel an appointment, answer questions about the clinic, or take a message."
         return "I can book or cancel appointments, tell you about our hours, prices and location, or take a message for the team. What would you like?"

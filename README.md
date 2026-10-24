@@ -170,7 +170,7 @@ python -m pytest -q
 
 `requirements-core.txt` is enough for the tests (no speech models). CI runs them on Python 3.10 and 3.13 with no API key and no network ([workflow](.github/workflows/tests.yml)).
 
-There are 45 tests. They cover the booking rules (hours, overlaps, lead time, closed days, horizon, validation, cancelling and slot release, persistence, readable references), the date and time parsing for spoken phrases, offline conversations from start to finish, the HTTP API, and the Claude tool loop with a fake client: tools get run, thinking blocks are passed back unchanged, and a refusal rolls back the turn. They also cover the Slovenian wiring: date phrasing, prompt, greeting, speech defaults, the fallback to English without Claude, and server-side fallbacks being sent only to models that support them. The tests use a fixed clock and make no network calls.
+There are 48 tests. They cover the booking rules (hours, overlaps, lead time, closed days, horizon, validation, cancelling and slot release, persistence, readable references), the date and time parsing for spoken phrases, offline conversations from start to finish, the HTTP API, and the Claude tool loop with a fake client: tools get run, thinking blocks are passed back unchanged, and a refusal rolls back the turn. They also cover the Slovenian wiring: date phrasing, prompt, greeting, speech defaults, the fallback to English without Claude, and server-side fallbacks being sent only to models that support them. The tests use a fixed clock and make no network calls.
 
 ## How I built this
 
