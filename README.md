@@ -174,7 +174,36 @@ There are 45 tests. They cover the booking rules (hours, overlaps, lead time, cl
 
 ## How I built this
 
-<!-- Obrad will write this section. -->
+Most of my client work is under NDA, so I built this as a public stand-in for the voice and
+automation work I do. It shows the approach, not a finished product: a real deployment is
+shaped around one business, its phone line and its calendar.
+
+I build with AI coding agents. Claude Code wrote most of this code and the tests from my
+brief. My job is the part that decides whether a tool is useful: what it should do, how
+callers and staff will use it, what to test, and what to change after testing. For Nora that meant:
+
+- **Business rules live in code, not in the prompt.** Opening hours, double-booking and
+  cancellations are enforced by the booking service, so the model can't talk its way past them.
+- **Safety first.** Danger signs get a clear "call 112", and cancelling needs the reference
+  and the phone number to match.
+- **Slovenian, not just English.** Most voice demos stop at English; my local clients don't.
+- **Speed and cost, measured.** I had the same calls run on three models. Haiku got every
+  booking right, answered fastest and cost about 1/40 of Opus, so it is the default. On a
+  phone line a second of silence matters more than slightly nicer wording.
+- **An offline mode** so anyone can try the voice loop without an API key.
+
+<!-- TODO before publishing: call Nora yourself (English and Slovenian) and add one honest
+sentence about how it went, e.g. "I tested it with my own voice and ...". -->
+
+What earlier projects taught me: voice tools only show their problems in use. Speech
+recognition mishears names and numbers, and replies that read fine sound wrong out loud.
+You start from a basic version and improve it through testing, and working with AI agents
+lets me make those changes quickly, often the same day a client asks.
+
+For a real client I'd start by asking how calls are handled today, which calendar they use
+and what callers ask most, then connect Nora to their phone line and calendar instead of a
+demo database, so the new system fits how the practice already works. The question I start
+every project with is: what do *you* need?
 
 ## Making it real
 
