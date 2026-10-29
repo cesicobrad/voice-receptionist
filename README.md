@@ -11,6 +11,7 @@ You talk, it listens (local Whisper speech-to-text), Claude works out the answer
 ## What it does
 
 - **Books appointments** that respect opening hours, how long each service takes, and existing bookings. It won't double-book, book in the past, or book too far ahead.
+- **Never books without a yes.** The server only accepts a booking when Nora has just read that time back and the caller agreed. The prompt asks for this too, but a model once booked early in testing, so it's enforced in code.
 - **Cancels** a booking, but only when the reference and the phone number match.
 - **Answers questions** from a short knowledge file: hours, prices, parking, insurance, children, payment.
 - **Logs callback requests** for anything it can't handle.
@@ -170,7 +171,7 @@ python -m pytest -q
 
 `requirements-core.txt` is enough for the tests (no speech models). CI runs them on Python 3.10 and 3.13 with no API key and no network ([workflow](.github/workflows/tests.yml)).
 
-There are 48 tests. They cover the booking rules (hours, overlaps, lead time, closed days, horizon, validation, cancelling and slot release, persistence, readable references), the date and time parsing for spoken phrases, offline conversations from start to finish, the HTTP API, and the Claude tool loop with a fake client: tools get run, thinking blocks are passed back unchanged, and a refusal rolls back the turn. They also cover the Slovenian wiring: date phrasing, prompt, greeting, speech defaults, the fallback to English without Claude, and server-side fallbacks being sent only to models that support them. The tests use a fixed clock and make no network calls.
+There are 56 tests. They cover the booking rules (hours, overlaps, lead time, closed days, horizon, validation, cancelling and slot release, persistence, readable references), the date and time parsing for spoken phrases, offline conversations from start to finish, the HTTP API, and the Claude tool loop with a fake client: tools get run, thinking blocks are passed back unchanged, a refusal rolls back the turn, and a booking is refused unless the caller has just said yes to the time Nora read back. They also cover the Slovenian wiring: date phrasing, prompt, greeting, speech defaults, the fallback to English without Claude, and server-side fallbacks being sent only to models that support them. The tests use a fixed clock and make no network calls.
 
 ## How I built this
 
@@ -191,9 +192,6 @@ callers and staff will use it, what to test, and what to change after testing. F
   booking right, answered fastest and cost about 1/40 of Opus, so it is the default. On a
   phone line a second of silence matters more than slightly nicer wording.
 - **An offline mode** so anyone can try the voice loop without an API key.
-
-<!-- TODO before publishing: call Nora yourself (English and Slovenian) and add one honest
-sentence about how it went, e.g. "I tested it with my own voice and ...". -->
 
 What earlier projects taught me: voice tools only show their problems in use. Speech
 recognition mishears names and numbers, and replies that read fine sound wrong out loud.

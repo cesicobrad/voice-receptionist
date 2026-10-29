@@ -2,7 +2,7 @@ from types import SimpleNamespace as NS
 
 import pytest
 
-from app.assistant import ClaudeReceptionist, ScriptedReceptionist, parse_date, parse_time
+from app.assistant import ClaudeReceptionist, ScriptedReceptionist, parse_date, parse_time, time_mentioned
 from tests.conftest import NOW, THU, TUE
 
 
@@ -107,22 +107,55 @@ def test_claude_loop_runs_tools_and_keeps_history(svc):
         "service": "checkup", "date": "2026-11-03", "time": "10:00",
         "name": "Ana Novak", "phone": "041555123", "notes": ""})
     client = FakeClient([
+        NS(stop_reason="end_turn", content=[NS(type="text", text="A checkup on Tuesday the 3rd at 10 am for Ana Novak. Shall I book it?")]),
         NS(stop_reason="tool_use", content=[NS(type="thinking", thinking=""), tool_call]),
         NS(stop_reason="end_turn", content=[NS(type="text", text="You're booked for Tuesday at 10 am.")]),
     ])
     bot = ClaudeReceptionist(svc, client=client, model="claude-opus-5-5", effort="low")
-    turn = bot.respond("Book me a checkup Tuesday at ten, Ana Novak, 041 555 123.")
+    bot.respond("Book me a checkup Tuesday at ten, Ana Novak, 041 555 123.")
+    turn = bot.respond("Yes please.")
 
     assert turn.reply == "You're booked for Tuesday at 10 am."
     assert turn.events[0]["type"] == "booked"
     assert svc.upcoming()[0]["start"] == "2026-11-03T10:00"
-    first, second = client.calls
+    _, first, second = client.calls
     assert first["model"] == "claude-opus-5-5" and first["output_config"] == {"effort": "low"}
     assert first["fallbacks"] == "default"
     assert "Monday, 2026-11-02" in first["system"]
     result = second["messages"][-1]["content"][0]
     assert result["tool_use_id"] == "tu_1" and result["is_error"] is False
     assert second["messages"][-2]["content"][0].type == "thinking"  # passed back unchanged
+
+
+def test_claude_cannot_book_before_the_caller_says_yes(svc):
+    # Seen live: the model booked 08:00 while asking "9 am, shall I book?". The server refuses it.
+    early = NS(type="tool_use", id="tu_1", name="book_appointment", input={
+        "service": "cleaning", "date": "2026-11-05", "time": "08:00",
+        "name": "Ana Novak", "phone": "041555123", "notes": ""})
+    client = FakeClient([
+        NS(stop_reason="end_turn", content=[NS(type="text", text="The earliest is 9 am on Thursday. Shall I book it?")]),
+        NS(stop_reason="tool_use", content=[early]),
+        NS(stop_reason="end_turn", content=[NS(type="text", text="Sorry, to confirm: 9 am on Thursday?")]),
+    ])
+    bot = ClaudeReceptionist(svc, client=client)
+    bot.respond("A cleaning on Thursday, Ana Novak, 041 555 123.")
+    turn = bot.respond("Yes.")
+    assert turn.events == [] and svc.upcoming() == []
+    result = client.calls[-1]["messages"][-1]["content"][0]
+    assert result["is_error"] is True and "not_confirmed" in result["content"]
+
+
+@pytest.mark.parametrize("reply, hhmm, expected", [
+    ("Shall I book 9 am on Thursday?", "09:00", True),
+    ("Shall I book 9 am on Thursday?", "08:00", False),
+    ("Half past two on Friday, is that right?", "14:30", True),
+    ("Would 14:30 suit you?", "14:30", True),
+    ("Lahko vas vpišem ob pol desetih?", "09:30", True),
+    ("Ob devetih v četrtek, se strinjate?", "09:00", True),
+    ("Would you like me to check Thursday instead?", "09:00", False),
+])
+def test_time_mentioned(reply, hhmm, expected):
+    assert time_mentioned(reply, hhmm) is expected
 
 
 def test_claude_refusal_rolls_back_the_turn(svc):

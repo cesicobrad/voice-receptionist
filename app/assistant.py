@@ -121,6 +121,53 @@ Front desk notes:
 {knowledge}"""
 
 
+# ---- booking confirmation guard ---------------------------------------------
+# The prompt asks for a read-back and a yes, but a model can still book early (seen live with
+# Haiku: it booked 08:00 while saying "9 am, shall I book?"). So the server checks it too.
+
+YES = re.compile(r"\b(yes|yeah|yep|yup|sure|ok|okay|correct|right|confirm\w*|go ahead|please do|book it|"
+                 r"sounds good|perfect|great|works|fine|good|please|absolutely|of course|da|ja|v redu|lahko|seveda|prav|točno|potrjujem|potrdim)\b", re.I)
+EN_HOURS = ["twelve", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven"]
+SL_HOURS = ["dvanajstih", "enih", "dveh", "treh", "štirih", "petih", "šestih", "sedmih", "osmih", "devetih",
+            "desetih", "enajstih", "dvanajstih", "trinajstih", "štirinajstih", "petnajstih", "šestnajstih",
+            "sedemnajstih", "osemnajstih", "devetnajstih"]
+
+
+def time_mentioned(reply: str, hhmm: str) -> bool:
+    """Was this start time said in the reply? Accepts 9:30, 9.30, 9 am, half past nine, pol desetih..."""
+    try:
+        h, m = (int(x) for x in hhmm.split(":"))
+    except (AttributeError, ValueError):
+        return False
+    text = reply.lower()
+    if re.search(rf"\b0?{h}[:.]{m:02d}\b", text):
+        return True
+    hours = {h, h + 1} if m >= 30 else {h}  # "half past nine", "quarter to ten", "pol desetih"
+    for hour in hours:
+        h12 = hour % 12 or 12
+        if re.search(rf"\b{h12}\s*(am|pm|a\.m\.|p\.m\.|o'clock)", text) or (m == 0 and re.search(rf"\b{hour}[:.]00\b", text)):
+            return True
+        words = [EN_HOURS[hour % 12]] + ([SL_HOURS[hour]] if hour < len(SL_HOURS) else []) + [SL_HOURS[hour % 12]]
+        if any(re.search(rf"\b{w}\b", text) for w in words):
+            return True
+    return False
+
+
+def booking_confirmed(caller_text: str, last_reply: str, hhmm: str) -> bool:
+    return bool(YES.search(caller_text)) and time_mentioned(last_reply, hhmm)
+
+
+def _spoken(content) -> str:
+    if isinstance(content, str):
+        return content
+    return " ".join(getattr(b, "text", "") for b in content if getattr(b, "type", "") == "text")
+
+
+NOT_CONFIRMED = {"ok": False, "error": "not_confirmed",
+                 "detail": "Not booked. Read the service, day, time and name back to the caller and wait for "
+                           "their yes in the next message before calling book_appointment."}
+
+
 class ClaudeReceptionist:
     mode = "claude"
 
@@ -144,6 +191,7 @@ class ClaudeReceptionist:
 
     def respond(self, text: str) -> Turn:
         checkpoint = len(self.history)
+        last_reply = next((_spoken(m["content"]) for m in reversed(self.history) if m["role"] == "assistant"), "")
         self.history.append({"role": "user", "content": text})
         events: list[dict] = []
         system = build_system_prompt(self.clinic, self.knowledge, self.bookings.now().date(), self.language)
@@ -175,7 +223,11 @@ class ClaudeReceptionist:
                 for block in response.content:
                     if block.type != "tool_use":
                         continue
-                    result, event = run_tool(self.bookings, block.name, dict(block.input))
+                    args = dict(block.input)
+                    if block.name == "book_appointment" and not booking_confirmed(text, last_reply, args.get("time")):
+                        result, event = NOT_CONFIRMED, None
+                    else:
+                        result, event = run_tool(self.bookings, block.name, args)
                     log.info("tool %s(%s) -> %s", block.name, block.input, result)
                     if event:
                         events.append(event)
