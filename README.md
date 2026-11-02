@@ -8,7 +8,7 @@ You talk, it listens (local Whisper speech-to-text), Claude works out the answer
 
 ![Booking a cleaning by voice (Opus 5.5 run)](docs/screenshot.png)
 
-**Watch it:** [two-and-a-half-minute demo video](https://cesicobrad.github.io/assets/video/nora.mp4)
+**Watch it:** [two-and-a-half-minute demo video](https://obradcesic.com/assets/video/nora.mp4)
 
 ## What it does
 
